@@ -11,7 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150530000508) do
+ActiveRecord::Schema.define(version: 20150928175428) do
+
+  create_table "events", force: true do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.string   "type_event"
+    t.string   "description"
+    t.string   "to_bring"
+    t.integer  "minimum_participants"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "happen_at"
+    t.integer  "duration"
+    t.integer  "privacy"
+    t.string   "location"
+  end
 
   create_table "favorites", force: true do |t|
     t.integer  "favorable_id"
@@ -92,10 +107,14 @@ ActiveRecord::Schema.define(version: 20150530000508) do
     t.string   "location"
     t.date     "birthday"
     t.string   "slug"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["birthday"], name: "index_users_on_birthday"
   add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["provider"], name: "index_users_on_provider"
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["uid"], name: "index_users_on_uid"
 
 end

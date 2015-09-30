@@ -24,6 +24,8 @@ gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
+# Use bower as frontend package manager
+gem 'bower'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -50,3 +52,4 @@ gem 'filepicker-rails'
 gem 'faker'
 gem 'pry'
 gem 'friendly_id', '~> 5.1.0'
+gem 'chronic_duration'

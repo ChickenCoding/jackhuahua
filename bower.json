@@ -1,0 +1,9 @@
+{
+  "name": "Jackhuahua",
+  "version": "0.0.1",
+  "main": "",
+  "private": true,
+  "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "~4.17.37"
+  }
+}

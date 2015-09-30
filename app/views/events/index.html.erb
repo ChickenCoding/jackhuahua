@@ -1,0 +1,22 @@
+<h1>Jackhuahua events</h1>
+
+<% if policy(Event.new).create? %>
+  <%= link_to "Add an event", new_event_path, class: "btn btn-success" %>
+<% end %>
+
+<% @events.each do |event| %>
+  <div class="media">
+    <div class="media-body">
+      <h4 class="media-heading">
+        <%= link_to event.title, event %>
+      </h4>
+      <small>
+        will happen in 
+          <%= distance_of_time_in_words(Time.now, event.happen_at) %>
+        by <%= event.user.name %>
+      </small>
+    </div>
+  </div>
+<% end %>
+<%= will_paginate @events %>
+

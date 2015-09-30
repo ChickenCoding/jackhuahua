@@ -25,14 +25,31 @@ require 'faker'
  galleries = Gallery.all
 
  # Create Topics
-25.times do
+ 25.times do
   topic = Topic.create!(
       user:   users.sample,
       title:  Faker::Lorem.sentence,
       body:   Faker::Lorem.paragraph
   )
-end
-topics = Topic.all
+ end
+ topics = Topic.all
+
+ # Create Events
+ 20.times do
+   event = Event.create(
+      user:   users.sample,
+      title: Faker::Lorem.sentence,
+      type_event: ["party", "bbq", "competition", "ballad", "other"].sample,
+      description: Faker::Lorem.paragraph,
+      to_bring: Faker::Lorem.sentence,
+      minimum_participants: Faker::Number.between(from = 0, to = 450),
+      happen_at: Faker::Date.forward(days = 678),
+      duration: Random.rand(1000).to_i,
+      privacy: Random.rand(1).to_i,
+      location: "#{Faker::Address.street_address}, #{Faker::Address.city}"
+   )
+ end
+ events = Event.all
 
  # Create an admin user
  admin = User.new(
@@ -57,3 +74,4 @@ puts "Seed finished"
 puts "#{User.count} users created"
 puts "#{Gallery.count} galleries created"
 puts "#{Topic.count} topics created"
+puts "#{Event.count} events created"

@@ -1,0 +1,74 @@
+<h1>Edit Event for <%= @user.name %></h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <p>Guidelines for events</p>
+    <ul>
+      <li>Have to be entertaining.</li>
+      <li>Tip: it's always more fun with beers.</li>
+    </ul>
+  </div>
+  <div class="col-md-8">
+    <%= form_for @event do |f| %>
+      <% if @event.errors.any? %>
+        <div class="alert alert-danger">
+          <h4>There are <%= pluralize(@event.errors.count, "error") %>.</h4>
+          <ul>
+            <% @event.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <%= form_group_tag(@event.errors[:title]) do %>
+        <%= f.label :title %>
+        <%= f.text_field :title, class: 'form-control', value: @event.title %>
+      <% end %>
+      <%= form_group_tag(@event.errors[:type_event]) do %>
+        <%= f.label :type_event %>
+        <%= f.select(:type_event, options_for_select(%w[party bbq competition], @event.type_event.to_s),{}, {:class => 'form-control'}) %>
+      <% end %>
+      <%= form_group_tag(@event.errors[:description]) do %>
+        <%= f.label :description %>
+        <%= f.text_field :description, class: 'form-control', value: @event.description %>
+      <% end %>
+      <%= form_group_tag(@event.errors[:to_bring]) do %>
+        <%= f.label :to_bring %>
+        <%= f.text_field :to_bring, class: 'form-control', value: @event.to_bring %>
+      <% end %>
+      <%= form_group_tag(@event.errors[:minimum_participants]) do %>
+        <%= f.label :minimum_participants %>
+        <%= f.number_field :minimum_participants, class: 'form-control', value: @event.minimum_participants.to_i %>
+      <% end %>
+      <div class="input-group date" id="datepicker">
+        <%= form_group_tag(@event.errors[:happen_at]) do %>
+          <%= f.label :happen_at %>
+          <%= f.text_field :happen_at, class: 'form-control', value: @event.happen_at.strftime("%m/%d/%Y %I:%M %p").to_s %>
+        <% end %>
+      </div>
+      <%= form_group_tag(@event.errors[:duration]) do %>
+        <%= f.label :duration %>
+        <%= f.text_field :duration, class: 'form-control', value: ChronicDuration::output(@event.duration) %>
+      <% end %>
+      <%= form_group_tag(@event.errors[:privacy]) do %>
+        <%= f.label :privacy %>
+        <%= f.select(:privacy,
+          options_for_select({"public" => "0", "private" => "1"}, @event.privacy.to_s),
+          {},
+          {:class => 'form-control'})
+        %>
+      <% end %>
+      <%= form_group_tag(@event.errors[:location]) do %>
+        <%= f.label :location %>
+        <%= f.text_field :location, class: 'form-control', value: @event.location %>
+      <% end %>
+      <div class="form_group">
+        <%= f.hidden_field :user_id, value: @user.id %>
+        <%= f.submit "Update", class: "btn btn-success" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script>
+  $("#datepicker input").datetimepicker();
+</script>

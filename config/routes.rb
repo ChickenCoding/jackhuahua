@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   resources :photos
   resources :topics
+  resources :events
 
   resources :friendships, only: [:create, :destroy]
   resources :favorites, only: [:create, :destroy]

@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :friends, :through => :friendships
   has_many :favorites, dependent: :destroy
   has_many :topics, dependent: :destroy
+  has_many :events, dependent: :destroy
 
   mount_uploader :avatar, AvatarUploader
 

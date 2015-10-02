@@ -1,6 +1,9 @@
 class EventsController < ApplicationController
   def index
-    @events = Event.reorder("happen_at ASC").paginate(page: params[:page], per_page: 10)
+    @events = Event
+      .where("happen_at >= ?", Date.today)
+      .reorder("happen_at ASC")
+      .paginate(page: params[:page], per_page: 10)
     authorize @events
   end
 
@@ -18,9 +21,13 @@ class EventsController < ApplicationController
 
   def create
     @user = current_user
+    @location = Location.new(location_params)
     @event = current_user.events.build(event_params)
     authorize @event
     if @event.save
+      if @location.save!
+        @event.update_attributes(:location_id => @location.id)
+      end
       flash[:notice] = "Event was created."
       redirect_to [@event]
     else
@@ -38,9 +45,13 @@ class EventsController < ApplicationController
   def update
     @event = Event.find(params[:id])
     @user = User.find(@event.user_id)
+    @location = Location.find(@event.location_id)
     authorize @event
+    puts event_params
 
-    if @event.update_attributes(event_params)
+
+    if @event.update_attributes(event_params) and
+      @location.update_attributes(location_params)
       flash[:notice] = "Event #{@event.title} was updated."
       redirect_to [@event]
     else
@@ -73,8 +84,13 @@ class EventsController < ApplicationController
       :happen_at,
       :duration,
       :privacy,
-      :location,
-      :user_id
+      :user_id,
+      :location_id
+    )
+  end
+  def location_params
+    params.require(:location).permit(
+      :name, :lat, :lng
     )
   end
 end

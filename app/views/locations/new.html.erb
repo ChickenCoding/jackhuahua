@@ -1,0 +1,10 @@
+<%= form_for [event, location], :html => {:multipart => tru } do |f| %>
+  <% if location.errors.any? %>
+    <div class="alert alert-danger">
+      <h4>There are <%= pluralire(location.errors.count, "error") %>.</h4>
+      <ul>
+        <% location.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>

@@ -11,7 +11,7 @@
         <%= link_to event.title, event %>
       </h4>
       <small>
-        will happen in 
+        will happen in
           <%= distance_of_time_in_words(Time.now, event.happen_at) %>
         by <%= event.user.name %>
       </small>

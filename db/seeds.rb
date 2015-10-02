@@ -5,7 +5,7 @@ require 'faker'
    user = User.new(
      name:     Faker::Name.first_name,
      email:    Faker::Internet.email,
-     password: Faker::Lorem.characters(10),
+     password: "helloworld",
      description: Faker::Lorem.paragraph,
      location: Faker::Address.country
    )
@@ -34,9 +34,19 @@ require 'faker'
  end
  topics = Topic.all
 
+ # Create Location
+  10.times do
+    location = Location.create!(
+        name: "#{Faker::Address.street_address}, #{Faker::Address.zip_code} #{Faker::Address.city} #{Faker::Address.state} ",
+        lat: Faker::Address.latitude,
+        lng: Faker::Address.longitude
+    )
+  end
+  locations = Location.all
+
  # Create Events
  20.times do
-   event = Event.create(
+   event = Event.create!(
       user:   users.sample,
       title: Faker::Lorem.sentence,
       type_event: ["party", "bbq", "competition", "ballad", "other"].sample,
@@ -46,7 +56,7 @@ require 'faker'
       happen_at: Faker::Date.forward(days = 678),
       duration: Random.rand(1000).to_i,
       privacy: Random.rand(1).to_i,
-      location: "#{Faker::Address.street_address}, #{Faker::Address.city}"
+      location: locations.sample
    )
  end
  events = Event.all
@@ -70,8 +80,23 @@ require 'faker'
  rachel.skip_confirmation!
  rachel.save!
 
+ event_for_rachel = Event.create!(
+      user: rachel,
+      title: Faker::Lorem.sentence,
+      type_event: ["party", "bbq", "competition", "ballad", "other"].sample,
+      description: Faker::Lorem.paragraph,
+      to_bring: Faker::Lorem.sentence,
+      minimum_participants: Faker::Number.between(from = 0, to = 450),
+      happen_at: (Time::now + 5).to_datetime,
+      duration: Random.rand(1000).to_i,
+      privacy: Random.rand(1).to_i,
+      location: locations.sample
+ )
+ event_for_rachel.save!
+
 puts "Seed finished"
 puts "#{User.count} users created"
 puts "#{Gallery.count} galleries created"
 puts "#{Topic.count} topics created"
 puts "#{Event.count} events created"
+puts "#{Location.count} locations created"

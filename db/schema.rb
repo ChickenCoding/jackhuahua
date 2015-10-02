@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20150928175428) do
 
   create_table "events", force: true do |t|
     t.integer  "user_id"
+    t.integer  "location_id"
     t.string   "title"
     t.string   "type_event"
     t.string   "description"
@@ -25,7 +26,6 @@ ActiveRecord::Schema.define(version: 20150928175428) do
     t.datetime "happen_at"
     t.integer  "duration"
     t.integer  "privacy"
-    t.string   "location"
   end
 
   create_table "favorites", force: true do |t|
@@ -67,6 +67,12 @@ ActiveRecord::Schema.define(version: 20150928175428) do
   end
 
   add_index "galleries", ["user_id"], name: "index_galleries_on_user_id"
+
+  create_table "locations", force: true do |t|
+    t.string "name"
+    t.float  "lat"
+    t.float  "lng"
+  end
 
   create_table "photos", force: true do |t|
     t.integer  "gallery_id"

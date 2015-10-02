@@ -9,9 +9,9 @@
     </h3>
     <ul>
       <li>
-        happens in 
+        happens in
         <strong><%= distance_of_time_in_words(Time.now, @event.happen_at) %></strong>
-        , will last 
+        , will last
         <strong><%= distance_of_time_in_words(@event.duration) %></strong>
       </li>
       <li>
@@ -25,9 +25,12 @@
       <li>
         And wil happen at <strong><%= @event.location %></strong>
       </li>
+      <li>
+        <%= render "locations/show" %>
+      </li>
     </ul>
   </div>
-  <div clas="col-md-4">
+  <div class="col-md-4">
     <% if policy(@event).edit? %>
         <%= link_to "Edit event", edit_event_path(@event), class: 'btn btn-success' %>
     <% end %>
@@ -37,3 +40,22 @@
   </div>
 </div>
 
+<%#Todo : rest location%>
+<div style="display:none">
+  <div id="location-latitude">
+    <%= @event.location.lat %>
+  </div>
+  <div id="location-longitude">
+    <%= @event.location.lng %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var map = new Marker("#map");
+  var current = {
+    lat: parseFloat($("#location-latitude").html()),
+    lng: parseFloat($("#location-longitude").html())
+  };
+  map.render({"lat": current.lat , "lng": current.lng});
+  map.add({"lat": current.lat, "lng": current.lng, "title": "marker"});
+</script>

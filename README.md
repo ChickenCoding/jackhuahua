@@ -14,7 +14,7 @@ Install needed gem and packages
 
 Additionaly, if you want a working dev environment
 ```
-  $ rake migrate
+  $ rake db:migrate
   $ rake db:seed
 ```
 

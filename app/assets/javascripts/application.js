@@ -17,3 +17,4 @@
 //= require moment/min/moment.min
 //= require eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker
 //= require_tree .
+//= require marker

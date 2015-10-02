@@ -60,8 +60,21 @@
       <% end %>
       <%= form_group_tag(@event.errors[:location]) do %>
         <%= f.label :location %>
-        <%= f.text_field :location, class: 'form-control', value: @event.location %>
+        <div id="location-name">
+        <%= text_field :location, :name, class: 'form-control', value: @event.location.name %>
+        </div>
+        <div style="display:none">
+          <div id="location-latitude">
+            <%= hidden_field :location, :lat, value: @event.location.lat %>
+          </div>
+          <div id="location-longitude">
+            <%= hidden_field :location, :lng, value: @event.location.lng %>
+          </div>
+        </div>
       <% end %>
+
+      <%= render "locations/show" %>
+
       <div class="form_group">
         <%= f.hidden_field :user_id, value: @user.id %>
         <%= f.submit "Update", class: "btn btn-success" %>
@@ -71,4 +84,32 @@
 </div>
 <script>
   $("#datepicker input").datetimepicker();
+  var map = new Marker("#map");
+  var $name = $("#location-name input");
+  map.setLatitude("#location-latitude input");
+  map.setLongitude("#location-longitude input");
+  map.render({
+    "lat": map.latValue,
+    "lng": map.lngValue
+  });
+  map.add({
+    "lat": map.latValue,
+    "lng": map.lngValue,
+    "title": "marker"
+  });
+  GMaps.on("click", map.target.map, function(e) {
+    var address;
+    marker = map.updatePosition(e);
+    map.add(marker);
+    GMaps.geocode({
+      lat: marker.lat,
+      lng: marker.lng,
+      callback: function(results, status) {
+        if ("OK" === status) {
+          $name.val(results[0].formatted_address);
+        }
+      }
+    })
+  });
+
 </script>

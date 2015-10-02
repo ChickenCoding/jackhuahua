@@ -10,14 +10,17 @@ class EventsController < ApplicationController
   def show
     @event = Event.find(params[:id])
     @user = @event.user
-    if not EventParticipation
-      .where("user_id = ?", @event.user_id)
+
+    if not EventParticipation.where("user_id = ?", @event.user_id)
       .where("event_id = ?", @event.id)
       .where("will_participate = ?", 1)
       .present?
-      @event_participation = 0
-    else
       @event_participation = 1
+    else
+      @event_participation = 0
+    end
+    if @event.current_participants >= @event.maximum_participants
+      @event_participation = 2
     end
     authorize @event
   end
@@ -70,13 +73,20 @@ class EventsController < ApplicationController
   def join
     @event = Event.find(params[:id])
     @user = User.find(@event.user_id)
-    @event_participate = EventParticipation.new(
-      event: @event, user: @user, will_participate: 1
-    )
-    authorize @event
-    if @event_participate.save
-      flash[:notice] ="You have joined the event"
-      redirect_to @event
+    if @event.maximum_participants > @event.current_participants + 1
+      @event_participate = EventParticipation.new(
+        event: @event, user: @user, will_participate: 1
+      )
+      @event.update_attributes(
+        :current_participants => @event.current_participants + 1
+      )
+      authorize @event
+      if @event_participate.save
+        flash[:notice] ="You have joined the event"
+        redirect_to @event
+      end
+    else
+      flash[:error] = "This Event is full, sorry."
     end
   end
 

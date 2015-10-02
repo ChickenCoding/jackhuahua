@@ -9,11 +9,12 @@ Rails.application.routes.draw do
   resources :photos
   resources :topics
   resources :events
+  post 'events/:id/join', to: 'events#join', :as => :join_event
 
   resources :friendships, only: [:create, :destroy]
   resources :favorites, only: [:create, :destroy]
 
   get 'about' => 'welcome#about'
-  
+
   root to: 'welcome#index'
 end

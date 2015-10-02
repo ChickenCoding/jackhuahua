@@ -1,0 +1,2 @@
+class EventParticipationPolicy < ApplicationPolicy
+end

@@ -10,6 +10,15 @@ class EventsController < ApplicationController
   def show
     @event = Event.find(params[:id])
     @user = @event.user
+    if not EventParticipation
+      .where("user_id = ?", @event.user_id)
+      .where("event_id = ?", @event.id)
+      .where("will_participate = ?", 1)
+      .present?
+      @event_participation = 0
+    else
+      @event_participation = 1
+    end
     authorize @event
   end
 
@@ -47,8 +56,6 @@ class EventsController < ApplicationController
     @user = User.find(@event.user_id)
     @location = Location.find(@event.location_id)
     authorize @event
-    puts event_params
-
 
     if @event.update_attributes(event_params) and
       @location.update_attributes(location_params)
@@ -57,6 +64,19 @@ class EventsController < ApplicationController
     else
       flash[:error] = "There was error updating the event"
       render :edit
+    end
+  end
+
+  def join
+    @event = Event.find(params[:id])
+    @user = User.find(@event.user_id)
+    @event_participate = EventParticipation.new(
+      event: @event, user: @user, will_participate: 1
+    )
+    authorize @event
+    if @event_participate.save
+      flash[:notice] ="You have joined the event"
+      redirect_to @event
     end
   end
 

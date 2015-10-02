@@ -36,7 +36,12 @@
     <% end %>
     <% if policy(@event).destroy? %>
         <%= link_to "Delete event", [@event], method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure you want to delete this event?' } %>
-    <% end %>
+      <% end %>
+   <% if @event_participation == 0 %>
+     <%= button_to "Join event", {action: "join"}, {class: 'btn btn-primary'} %>
+   <% else %>
+       You have joined this event
+   <% end %>
   </div>
 </div>
 

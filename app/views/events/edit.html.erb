@@ -40,6 +40,10 @@
         <%= f.label :minimum_participants %>
         <%= f.number_field :minimum_participants, class: 'form-control', value: @event.minimum_participants.to_i %>
       <% end %>
+      <%= form_group_tag(@event.errors[:maximum_participants]) do %>
+        <%= f.label :maximum_participants %>
+        <%= f.number_field :maximum_participants, class: 'form-control', value: @event.maximum_participants.to_i %>
+      <% end %>
       <div class="input-group date" id="datepicker">
         <%= form_group_tag(@event.errors[:happen_at]) do %>
           <%= f.label :happen_at %>
@@ -84,32 +88,33 @@
 </div>
 <script>
   $("#datepicker input").datetimepicker();
-  var map = new Marker("#map");
-  var $name = $("#location-name input");
-  map.setLatitude("#location-latitude input");
-  map.setLongitude("#location-longitude input");
-  map.render({
-    "lat": map.latValue,
-    "lng": map.lngValue
-  });
-  map.add({
-    "lat": map.latValue,
-    "lng": map.lngValue,
-    "title": "marker"
-  });
-  GMaps.on("click", map.target.map, function(e) {
-    var address;
-    marker = map.updatePosition(e);
-    map.add(marker);
-    GMaps.geocode({
-      lat: marker.lat,
-      lng: marker.lng,
-      callback: function(results, status) {
-        if ("OK" === status) {
-          $name.val(results[0].formatted_address);
+  (function($) {
+    var map = new Marker("#map");
+    var $name = $("#location-name input");
+    map.setLatitude("#location-latitude input");
+    map.setLongitude("#location-longitude input");
+    map.render({
+      "lat": map.latValue,
+      "lng": map.lngValue
+    });
+    map.add({
+      "lat": map.latValue,
+      "lng": map.lngValue,
+      "title": "marker"
+    });
+    GMaps.on("click", map.target.map, function(e) {
+      var address;
+      marker = map.updatePosition(e);
+      map.add(marker);
+      GMaps.geocode({
+        lat: marker.lat,
+        lng: marker.lng,
+        callback: function(results, status) {
+          if ("OK" === status) {
+            $name.val(results[0].formatted_address);
+          }
         }
-      }
-    })
-  });
-
+      })
+    });
+  }(jQuery));
 </script>

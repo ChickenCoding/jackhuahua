@@ -51,11 +51,14 @@
 </div>
 
 <script type="text/javascript">
-  var map = new Marker("#map");
-  var current = {
-    lat: parseFloat($("#location-latitude").html()),
-    lng: parseFloat($("#location-longitude").html())
-  };
-  map.render({"lat": current.lat , "lng": current.lng});
-  map.add({"lat": current.lat, "lng": current.lng, "title": "marker"});
+  (function($) {
+
+    var map = new Marker("#map");
+    var current = {
+      lat: parseFloat($("#location-latitude").html()),
+      lng: parseFloat($("#location-longitude").html())
+    };
+    map.render({"lat": current.lat , "lng": current.lng});
+    map.add({"lat": current.lat, "lng": current.lng, "title": "marker"});
+  }(jQuery));
 </script>

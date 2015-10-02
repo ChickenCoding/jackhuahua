@@ -81,6 +81,7 @@ class EventsController < ApplicationController
       :description,
       :to_bring,
       :minimum_participants,
+      :maximum_participants,
       :happen_at,
       :duration,
       :privacy,

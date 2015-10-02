@@ -87,6 +87,7 @@ require 'faker'
       description: Faker::Lorem.paragraph,
       to_bring: Faker::Lorem.sentence,
       minimum_participants: Faker::Number.between(from = 0, to = 450),
+      maximum_participants: Faker::Number.between(from = 1, to = 450),
       happen_at: (Time::now + 5).to_datetime,
       duration: Random.rand(1000).to_i,
       privacy: Random.rand(1).to_i,

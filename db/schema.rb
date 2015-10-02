@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150928175428) do
+ActiveRecord::Schema.define(version: 20151002111306) do
 
   create_table "events", force: true do |t|
     t.integer  "user_id"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20150928175428) do
     t.datetime "happen_at"
     t.integer  "duration"
     t.integer  "privacy"
+    t.integer  "maximum_participants"
   end
 
   create_table "favorites", force: true do |t|

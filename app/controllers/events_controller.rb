@@ -1,17 +1,31 @@
 class EventsController < ApplicationController
   def index
-    @events = Event
-      .where("happen_at >= ?", Date.today)
-      .reorder("happen_at ASC")
-      .paginate(page: params[:page], per_page: 10)
+    if not current_user.nil?
+      @user = User.friendly.find(current_user.id)
+      @friendships = Friendship.where(user_id: @user.id).select("friend_id")
+      @friends_event = Event.where(user_id: @friendships)
+      @participation = EventParticipation.where(user_id: current_user.id).select("event_id")
+      puts "participation"
+      puts @participation
+      @joined_events = Event.where(id: @participation)
+      @events = Event.where.not(user_id: @friendships)
+        .where.not(id: @participation)
+        .where("happen_at >= ?", Date.today)
+        .reorder("happen_at ASC")
+        .paginate(page: params[:page], per_page: 10)
+    else
+      @events = Event
+        .where("happen_at >= ?", Date.today)
+        .reorder("happen_at ASC")
+        .paginate(page: params[:page], per_page: 10)
+    end
     authorize @events
   end
 
   def show
     @event = Event.find(params[:id])
     @user = @event.user
-
-    if not EventParticipation.where("user_id = ?", @event.user_id)
+    if not EventParticipation.where("user_id = ?", current_user.id)
       .where("event_id = ?", @event.id)
       .where("will_participate = ?", 1)
       .present?
@@ -75,7 +89,7 @@ class EventsController < ApplicationController
     @user = User.find(@event.user_id)
     if @event.maximum_participants > @event.current_participants + 1
       @event_participate = EventParticipation.new(
-        event: @event, user: @user, will_participate: 1
+        event: @event, user: current_user, will_participate: 1
       )
       @event.update_attributes(
         :current_participants => @event.current_participants + 1

@@ -3,20 +3,69 @@
 <% if policy(Event.new).create? %>
   <%= link_to "Add an event", new_event_path, class: "btn btn-success" %>
 <% end %>
-
-<% @events.each do |event| %>
-  <div class="media">
-    <div class="media-body">
-      <h4 class="media-heading">
-        <%= link_to event.title, event %>
-      </h4>
-      <small>
-        will happen in
-          <%= distance_of_time_in_words(Time.now, event.happen_at) %>
-        by <%= event.user.name %>
-      </small>
+<div class="row">
+  <div class="tabbable tabs-left">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#events" data-toggle="tab">Events</a></li>
+      <li><a href="#friends" data-toggle="tab">Friends events</a></li>
+      <li><a href="#joined" data-toggle="tab">Joined events</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="events">
+        <% @events.each do |event| %>
+          <div class="media">
+            <div class="media-body">
+              <h4 class="media-heading">
+                <%= link_to event.title, event %>
+              </h4>
+              <small>
+                will happen in
+                  <%= distance_of_time_in_words(Time.now, event.happen_at) %>
+                by <%= event.user.name %>
+              </small>
+            </div>
+          </div>
+        <% end %>
+        <%= will_paginate @events %>
+      </div>
+      <div class="tab-pane" id="friends">
+        <% if @friends_event %>
+          <% @friends_event.each do |event| %>
+            <div class="media">
+              <div class="media-body">
+                <h4 class="media-heading">
+                  <%= link_to event.title, event %>
+                </h4>
+                <small>
+                  will happen in
+                    <%= distance_of_time_in_words(Time.now, event.happen_at) %>
+                  by <%= event.user.name %>
+                </small>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="tab-pane" id="joined">
+        <% if @joined_events %>
+          <% @joined_events.each do |event| %>
+            <div class="media">
+              <div class="media-body">
+                <h4 class="media-heading">
+                  <%= link_to event.title, event %>
+                </h4>
+                <small>
+                  will happen in
+                    <%= distance_of_time_in_words(Time.now, event.happen_at) %>
+                  by <%= event.user.name %>
+                </small>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
-<% end %>
-<%= will_paginate @events %>
+</div>
+
 
